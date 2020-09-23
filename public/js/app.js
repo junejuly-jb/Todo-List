@@ -1926,6 +1926,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1936,6 +1941,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getTodos: function getTodos() {
+      var _this = this;
+
+      axios.get('/api/myTodo').then(function (res) {
+        _this.todos = res.data.data;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
     saveData: function saveData() {
       var data = new FormData();
       data.append('title', this.form.title); // console.log(data)
@@ -1946,7 +1960,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log("mounted!");
+    this.getTodos();
   }
 });
 
@@ -37575,6 +37589,17 @@ var render = function() {
             })
           ])
         ]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "div",
+        { staticClass: "card" },
+        _vm._l(_vm.todos, function(todo) {
+          return _c("div", { key: todo.id }, [_vm._v(_vm._s(todo.title))])
+        }),
+        0
       )
     ])
   ])
