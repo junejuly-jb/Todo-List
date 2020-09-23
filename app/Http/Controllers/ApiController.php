@@ -15,12 +15,13 @@ class ApiController extends Controller
         $todo->save();
 
         return response()->json([
+            'asd' => 'sample',
             'message' => 'Added successfully'
         ]);
     }
 
     public function myTodo(){
-        $todos = Todo::latest();
+        $todos = Todo::latest()->get();
 
         return response()->json([
             'data' => $todos

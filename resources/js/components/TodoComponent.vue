@@ -13,6 +13,11 @@
         </div>
       </form>
     </div>
+    <div>
+      <div class="card">
+        <div v-for="todo in todos" :key="todo.id">{{todo.title}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,6 +33,13 @@
       }
     },
     methods:{
+      getTodos(){
+        axios.get('/api/myTodo').then((res) => {
+          this.todos = res.data.data
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
       saveData(){
         let data = new FormData();
         data.append('title', this.form.title)
@@ -38,7 +50,7 @@
       }
     },
     mounted() {
-      console.log("mounted!");
+      this.getTodos()
     },
   };
 </script>
