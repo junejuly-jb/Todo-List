@@ -158,7 +158,6 @@ class Form {
             axios[requestType](url, this.data())
                 .then(response => {
                     this.onSuccess(response.data);
-
                     resolve(response.data);
                 })
                 .catch(error => {
