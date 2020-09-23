@@ -1929,6 +1929,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      todos: '',
       form: new Form({
         title: ''
       })
@@ -1939,7 +1940,9 @@ __webpack_require__.r(__webpack_exports__);
       var data = new FormData();
       data.append('title', this.form.title); // console.log(data)
 
-      axios.post('/api/addTodo', data);
+      axios.post('/api/addTodo', data).then(function (res) {
+        console.log(res.data.message);
+      });
     }
   },
   mounted: function mounted() {

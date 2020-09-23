@@ -21,6 +21,7 @@
     
     data(){
       return{
+        todos: '',
         form: new Form({
           title: ''
         })
@@ -31,7 +32,9 @@
         let data = new FormData();
         data.append('title', this.form.title)
         // console.log(data)
-        axios.post('/api/addTodo', data)
+        axios.post('/api/addTodo', data).then(function(res){
+          console.log(res.data.message)
+        })
       }
     },
     mounted() {
