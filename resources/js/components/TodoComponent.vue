@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="py-5 text-center">
-      <h2 class="text-white">Vue Todo List App</h2>
+      <h2 class="text-white">Vue JS Todo List App</h2>
     </div>
     <div class="w-50 m-auto">
       <form @submit.prevent="saveData">
@@ -38,7 +38,7 @@
             </svg>
           </span>
           <span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#F44336" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <svg v-on:click="removeTodo(todo)" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#F44336" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
               <line x1="4" y1="7" x2="20" y2="7" />
               <line x1="10" y1="11" x2="10" y2="17" />
@@ -48,6 +48,7 @@
             </svg>
           </span>
         </div>
+        <hr>
       </div>
     </div>
   </div>
@@ -65,6 +66,15 @@
       }
     },
     methods:{
+      removeTodo(todo){
+        console.log(todo)
+        axios.delete('/api/deleteTodo/' + todo.id).then((res) => {
+          console.log(res.data.message)
+          this.getTodos()
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
       toggleTodo(todo){
         
         axios.put('/api/toggleTodo/' + todo.id, todo).then((response) => {
@@ -91,8 +101,6 @@
 
         else{
           data.append('title', this.form.title)
-
-
           axios.post('/api/addTodo', data).then((res) => {
             this.form.reset()
             this.getTodos()

@@ -1963,6 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1973,28 +1974,40 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    toggleTodo: function toggleTodo(todo) {
+    removeTodo: function removeTodo(todo) {
       var _this = this;
 
-      axios.put('/api/toggleTodo/' + todo.id, todo).then(function (response) {
-        console.log(response.data);
+      console.log(todo);
+      axios["delete"]('/api/deleteTodo/' + todo.id).then(function (res) {
+        console.log(res.data.message);
 
         _this.getTodos();
       })["catch"](function (err) {
         console.log(err);
       });
     },
-    getTodos: function getTodos() {
+    toggleTodo: function toggleTodo(todo) {
       var _this2 = this;
 
+      axios.put('/api/toggleTodo/' + todo.id, todo).then(function (response) {
+        console.log(response.data);
+
+        _this2.getTodos();
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    getTodos: function getTodos() {
+      var _this3 = this;
+
       axios.get('/api/myTodo').then(function (res) {
-        _this2.todos = res.data.data;
+        _this3.todos = res.data.data;
       })["catch"](function (err) {
         console.log(err);
       });
     },
     saveData: function saveData() {
-      var _this3 = this;
+      var _this4 = this;
 
       var data = new FormData();
 
@@ -2003,9 +2016,9 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         data.append('title', this.form.title);
         axios.post('/api/addTodo', data).then(function (res) {
-          _this3.form.reset();
+          _this4.form.reset();
 
-          _this3.getTodos();
+          _this4.getTodos();
 
           alert(res.data.message);
         });
@@ -37789,6 +37802,11 @@ var render = function() {
                     fill: "none",
                     "stroke-linecap": "round",
                     "stroke-linejoin": "round"
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.removeTodo(todo)
+                    }
                   }
                 },
                 [
@@ -37820,7 +37838,9 @@ var render = function() {
                 ]
               )
             ])
-          ])
+          ]),
+          _vm._v(" "),
+          _c("hr")
         ])
       }),
       0
@@ -37833,7 +37853,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "py-5 text-center" }, [
-      _c("h2", { staticClass: "text-white" }, [_vm._v("Vue Todo List App")])
+      _c("h2", { staticClass: "text-white" }, [_vm._v("Vue JS Todo List App")])
     ])
   },
   function() {

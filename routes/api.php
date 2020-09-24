@@ -24,4 +24,5 @@ Route::get('/myTodo', 'App\Http\Controllers\ApiController@myTodo');
 Route::get('/getTodo/{id}', 'App\Http\Controllers\ApiController@getTodo');
 
 Route::put('/toggleTodo/{id}', 'App\Http\Controllers\ApiController@toggleTodo');
+Route::delete('/deleteTodo/{id}', 'App\Http\Controllers\ApiController@deleteTodo');
 
