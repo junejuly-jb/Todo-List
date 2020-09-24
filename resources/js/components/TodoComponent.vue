@@ -59,6 +59,7 @@
     
     data(){
       return{
+        editMode: false,
         todos: '',
         form: new Form({
           title: ''
