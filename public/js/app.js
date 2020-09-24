@@ -1931,6 +1931,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1941,22 +1973,43 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getTodos: function getTodos() {
+    toggleTodo: function toggleTodo(todo) {
       var _this = this;
 
+      axios.put('/api/toggleTodo/' + todo.id, todo).then(function (response) {
+        console.log(response.data);
+
+        _this.getTodos();
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    getTodos: function getTodos() {
+      var _this2 = this;
+
       axios.get('/api/myTodo').then(function (res) {
-        _this.todos = res.data.data;
+        _this2.todos = res.data.data;
       })["catch"](function (err) {
         console.log(err);
       });
     },
     saveData: function saveData() {
-      var data = new FormData();
-      data.append('title', this.form.title); // console.log(data)
+      var _this3 = this;
 
-      axios.post('/api/addTodo', data).then(function (res) {
-        console.log(res.data.message);
-      });
+      var data = new FormData();
+
+      if (this.form.title == '') {
+        alert('Invalid');
+      } else {
+        data.append('title', this.form.title);
+        axios.post('/api/addTodo', data).then(function (res) {
+          _this3.form.reset();
+
+          _this3.getTodos();
+
+          alert(res.data.message);
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -37592,16 +37645,186 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", [
-      _c(
-        "div",
-        { staticClass: "card" },
-        _vm._l(_vm.todos, function(todo) {
-          return _c("div", { key: todo.id }, [_vm._v(_vm._s(todo.title))])
-        }),
-        0
-      )
-    ])
+    _c(
+      "div",
+      { staticClass: "w-50 m-auto" },
+      _vm._l(_vm.todos, function(todo) {
+        return _c("div", { key: todo.id, staticClass: "my-1 py-2 px-2" }, [
+          _c("span", [
+            todo.status == "completed"
+              ? _c(
+                  "svg",
+                  {
+                    staticClass: "icon icon-tabler icon-tabler-circle-check",
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "28",
+                      height: "28",
+                      viewBox: "0 0 24 24",
+                      "stroke-width": "1.5",
+                      stroke: "#03A9F4",
+                      fill: "none",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleTodo(todo)
+                      }
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        stroke: "none",
+                        d: "M0 0h24v24H0z",
+                        fill: "none"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("circle", { attrs: { cx: "12", cy: "12", r: "9" } }),
+                    _vm._v(" "),
+                    _c("path", { attrs: { d: "M9 12l2 2l4 -4" } })
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            todo.status == "incomplete"
+              ? _c(
+                  "svg",
+                  {
+                    staticClass: "icon icon-tabler icon-tabler-circle",
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "28",
+                      height: "28",
+                      viewBox: "0 0 24 24",
+                      "stroke-width": "1.5",
+                      stroke: "#FFC107",
+                      fill: "none",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleTodo(todo)
+                      }
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        stroke: "none",
+                        d: "M0 0h24v24H0z",
+                        fill: "none"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("circle", { attrs: { cx: "12", cy: "12", r: "9" } })
+                  ]
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          todo.status == "completed"
+            ? _c("span", { staticClass: "text-white" }, [
+                _c("s", [_vm._v(_vm._s(todo.title))])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          todo.status == "incomplete"
+            ? _c("span", { staticClass: "text-white" }, [
+                _vm._v(_vm._s(todo.title))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "float-right" }, [
+            _c("span", [
+              _c(
+                "svg",
+                {
+                  staticClass: "icon icon-tabler icon-tabler-pencil",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: "28",
+                    height: "28",
+                    viewBox: "0 0 24 24",
+                    "stroke-width": "1.5",
+                    stroke: "#FFC107",
+                    fill: "none",
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: { stroke: "none", d: "M0 0h24v24H0z", fill: "none" }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d: "M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("line", {
+                    attrs: { x1: "13.5", y1: "6.5", x2: "17.5", y2: "10.5" }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("span", [
+              _c(
+                "svg",
+                {
+                  staticClass: "icon icon-tabler icon-tabler-trash",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: "28",
+                    height: "28",
+                    viewBox: "0 0 24 24",
+                    "stroke-width": "1.5",
+                    stroke: "#F44336",
+                    fill: "none",
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: { stroke: "none", d: "M0 0h24v24H0z", fill: "none" }
+                  }),
+                  _vm._v(" "),
+                  _c("line", {
+                    attrs: { x1: "4", y1: "7", x2: "20", y2: "7" }
+                  }),
+                  _vm._v(" "),
+                  _c("line", {
+                    attrs: { x1: "10", y1: "11", x2: "10", y2: "17" }
+                  }),
+                  _vm._v(" "),
+                  _c("line", {
+                    attrs: { x1: "14", y1: "11", x2: "14", y2: "17" }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d: "M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: { d: "M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" }
+                  })
+                ]
+              )
+            ])
+          ])
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = [

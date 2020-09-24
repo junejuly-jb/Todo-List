@@ -21,3 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/addTodo', 'App\Http\Controllers\ApiController@addTodo');
 Route::get('/myTodo', 'App\Http\Controllers\ApiController@myTodo');
+Route::get('/getTodo/{id}', 'App\Http\Controllers\ApiController@getTodo');
+
+Route::put('/toggleTodo/{id}', 'App\Http\Controllers\ApiController@toggleTodo');
+
