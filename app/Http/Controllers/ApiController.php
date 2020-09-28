@@ -7,6 +7,17 @@ use App\Models\Todo;
 
 class ApiController extends Controller
 {
+    public function updateTodo(Request $request, $id){
+        $todo = Todo::find($id);
+
+        $todo->title = $request->title;
+        $todo->save();
+
+        return response()->json([
+            'message' => 'Todo updated successfully'
+        ]);
+        
+    }
     public function addTodo(Request $req){
         $todo = new Todo([
             'title' => $req->title

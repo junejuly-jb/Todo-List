@@ -1998,26 +1998,45 @@ __webpack_require__.r(__webpack_exports__);
       editMode: false,
       todos: '',
       form: new Form({
+        id: '',
         title: ''
       })
     };
   },
   methods: {
+    updateTodo: function updateTodo() {
+      var _this = this;
+
+      console.log(this.form.id);
+      this.form.put('api/updateTodo/' + this.form.id).then(function (res) {
+        $('#editModal').modal('hide');
+        Toast.fire({
+          icon: 'success',
+          title: res.data.message
+        });
+
+        _this.getTodos();
+      })["catch"](function (err) {
+        Toast.fire({
+          icon: 'danger',
+          title: err
+        });
+      });
+    },
     btnClose: function btnClose() {
       this.form.reset();
     },
     editTodo: function editTodo(todo) {
-      console.log(todo);
       $('#editModal').modal('show');
       this.form.fill(todo);
     },
     saveData: function saveData() {
-      var _this = this;
+      var _this2 = this;
 
       this.form.post('api/addTodo').then(function (res) {
-        _this.form.reset();
+        _this2.form.reset();
 
-        _this.getTodos();
+        _this2.getTodos();
 
         Toast.fire({
           icon: 'success',
@@ -2031,33 +2050,33 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     removeTodo: function removeTodo(todo) {
-      var _this2 = this;
+      var _this3 = this;
 
       console.log(todo);
       axios["delete"]('/api/deleteTodo/' + todo.id).then(function (res) {
         console.log(res.data.message);
-
-        _this2.getTodos();
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
-    toggleTodo: function toggleTodo(todo) {
-      var _this3 = this;
-
-      axios.put('/api/toggleTodo/' + todo.id, todo).then(function (response) {
-        console.log(response.data);
 
         _this3.getTodos();
       })["catch"](function (err) {
         console.log(err);
       });
     },
-    getTodos: function getTodos() {
+    toggleTodo: function toggleTodo(todo) {
       var _this4 = this;
 
+      axios.put('/api/toggleTodo/' + todo.id, todo).then(function (response) {
+        console.log(response.data);
+
+        _this4.getTodos();
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    getTodos: function getTodos() {
+      var _this5 = this;
+
       axios.get('/api/myTodo').then(function (res) {
-        _this4.todos = res.data.data;
+        _this5.todos = res.data.data;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -42068,54 +42087,65 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "container py-2" }, [
-                _c("form", [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "" } }, [_vm._v("Title")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.title,
-                          expression: "form.title"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.form.title },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "title", $event.target.value)
-                        }
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.updateTodo($event)
                       }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary",
-                        attrs: { type: "button", "data-dismiss": "modal" },
-                        on: { click: _vm.btnClose }
-                      },
-                      [_vm._v("Close")]
-                    ),
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Title")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.title,
+                            expression: "form.title"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.form.title },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "title", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "submit" }
-                      },
-                      [_vm._v("Save changes")]
-                    )
-                  ])
-                ])
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.btnClose }
+                        },
+                        [_vm._v("Close")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Save changes")]
+                      )
+                    ])
+                  ]
+                )
               ])
             ])
           ]
@@ -42132,7 +42162,7 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.saveData($event)
+              return _vm.saveData()
             }
           }
         },
