@@ -10,7 +10,7 @@
             </button>
           </div>
           <div class="container py-2">
-            <form>
+            <form @submit.prevent="updateTodo">
               <div class="form-group">
                 <label for="">Title</label>
                 <input v-model="form.title" type="text" class="form-control">
@@ -32,7 +32,7 @@
       <h2 class="text-white">Vue JS Todo List App</h2>
     </div>
     <div class="w-50 m-auto">
-      <form @submit.prevent="saveData">
+      <form @submit.prevent="saveData()">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <button class="btn btn-success" type="submit">Add Todo</button>
@@ -90,16 +90,32 @@
         editMode: false,
         todos: '',
         form: new Form({
+          id: '',
           title: ''
         })
       }
     },
     methods:{
+      updateTodo(){
+        console.log(this.form.id)
+        this.form.put('api/updateTodo/' + this.form.id).then((res) => {
+          $('#editModal').modal('hide')
+          Toast.fire({
+            icon: 'success',
+            title: res.data.message
+          })
+          this.getTodos()
+        }).catch((err) => {
+          Toast.fire({
+            icon: 'danger',
+            title: err
+          })
+        })
+      },
       btnClose(){
         this.form.reset()
       },
       editTodo(todo){
-        console.log(todo)
         $('#editModal').modal('show')
         this.form.fill(todo)
       },
