@@ -1,5 +1,33 @@
 <template>
   <div class="container">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Todo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="btnClose">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="container py-2">
+            <form>
+              <div class="form-group">
+                <label for="">Title</label>
+                <input v-model="form.title" type="text" class="form-control">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="btnClose">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
     <div class="py-5 text-center">
       <h2 class="text-white">Vue JS Todo List App</h2>
     </div>
@@ -30,7 +58,7 @@
         <span class="text-white" v-if="todo.status == 'completed'"><s>{{ todo.title }}</s></span>
         <span class="text-white" v-if="todo.status == 'incomplete'">{{ todo.title }}</span>
         <div class="float-right">
-          <span>
+          <span v-on:click="editTodo(todo)">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFC107" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
               <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -67,6 +95,29 @@
       }
     },
     methods:{
+      btnClose(){
+        this.form.reset()
+      },
+      editTodo(todo){
+        console.log(todo)
+        $('#editModal').modal('show')
+        this.form.fill(todo)
+      },
+      saveData(){
+        this.form.post('api/addTodo').then((res) => {
+          this.form.reset()
+          this.getTodos()
+          Toast.fire({
+            icon: 'success',
+            title: res.data.message
+          })
+        }).catch((err) => {
+          Toast.fire({
+            icon: 'success',
+            title: err
+          })
+        })
+      },
       removeTodo(todo){
         console.log(todo)
         axios.delete('/api/deleteTodo/' + todo.id).then((res) => {
@@ -92,22 +143,6 @@
         }).catch((err) => {
           console.log(err)
         })
-      },
-      saveData(){
-        let data = new FormData();
-
-        if(this.form.title == ''){
-          alert('Invalid')
-        }
-
-        else{
-          data.append('title', this.form.title)
-          axios.post('/api/addTodo', data).then((res) => {
-            this.form.reset()
-            this.getTodos()
-            alert(res.data.message)
-          }) 
-        }
       }
     },
     mounted() {
