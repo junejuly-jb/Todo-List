@@ -2052,14 +2052,33 @@ __webpack_require__.r(__webpack_exports__);
     removeTodo: function removeTodo(todo) {
       var _this3 = this;
 
-      console.log(todo);
-      axios["delete"]('/api/deleteTodo/' + todo.id).then(function (res) {
-        console.log(res.data.message);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('/api/deleteTodo/' + todo.id).then(function (res) {
+            Toast.fire({
+              icon: 'success',
+              title: res.data.message
+            });
 
-        _this3.getTodos();
-      })["catch"](function (err) {
-        console.log(err);
-      });
+            _this3.getTodos();
+          })["catch"](function (err) {
+            Toast.fire({
+              icon: 'success',
+              title: err
+            });
+          });
+        } else {
+          Swal.close();
+        }
+      }); // console.log(todo)
     },
     toggleTodo: function toggleTodo(todo) {
       var _this4 = this;

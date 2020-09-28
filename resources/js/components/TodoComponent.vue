@@ -135,13 +135,39 @@
         })
       },
       removeTodo(todo){
-        console.log(todo)
-        axios.delete('/api/deleteTodo/' + todo.id).then((res) => {
-          console.log(res.data.message)
-          this.getTodos()
-        }).catch((err) => {
-          console.log(err)
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.delete('/api/deleteTodo/' + todo.id).then((res) => {
+              Toast.fire({
+                icon: 'success',
+                title: res.data.message
+              })
+              this.getTodos()
+            }).catch((err) => {
+              Toast.fire({
+                icon: 'success',
+                title: err
+              })
+            })
+          }
+          else{
+            Swal.close()
+          }
         })
+
+
+
+        // console.log(todo)
+        
       },
       toggleTodo(todo){
         
